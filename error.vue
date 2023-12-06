@@ -4,6 +4,7 @@ const error = useError()
 
 <template>
   <div>
+    <Nav/>
     <div v-if="(error.statusCode === 404)">
       <h1>404 - page not found</h1>
       <span>Return to the <a href="/">Home</a> page</span>
