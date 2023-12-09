@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { CHAIN_NAMESPACES, OPENLOGIN_NETWORK, WALLET_ADAPTERS } from "@web3auth/base";
+import { ADAPTER_EVENTS, CHAIN_NAMESPACES, OPENLOGIN_NETWORK, WALLET_ADAPTERS, type CONNECTED_EVENT_DATA } from "@web3auth/base";
 import { Web3AuthNoModal } from "@web3auth/no-modal";
 
 import { EthereumPrivateKeyProvider } from "@web3auth/ethereum-provider";
@@ -43,6 +43,26 @@ const openloginAdapter = new OpenloginAdapter({
 });
 
 web3auth.configureAdapter(openloginAdapter);
+
+/* const subscribeAuthEvents = (web3auth: any) => {
+  web3auth.on(ADAPTER_EVENTS.CONNECTED, (data: CONNECTED_EVENT_DATA) => {
+    console.log("connected to wallet", data);
+    // web3auth.provider will be available here after user is connected
+  });
+  web3auth.on(ADAPTER_EVENTS.CONNECTING, () => {
+    console.log("connecting");
+  });
+  web3auth.on(ADAPTER_EVENTS.DISCONNECTED, () => {
+    console.log("disconnected");
+  });
+  web3auth.on(ADAPTER_EVENTS.ERRORED, (error: any) => {
+    console.log("error", error);
+  });
+  web3auth.on(ADAPTER_EVENTS.ERRORED, (error: any) => {
+    console.log("error", error);
+  });
+}; */
+
 try {
   await web3auth.init();
   console.log('init done')
@@ -56,15 +76,20 @@ try {
     const web3authProvider = await web3auth.connectTo(WALLET_ADAPTERS.OPENLOGIN, {
       loginProvider: "apple",
     });
+    console.log('web3authprovider: ')
+    console.log(web3authProvider)
   } else {
     console.log('Already connected.')
   }
+  
+  console.log(await web3auth.authenticateUser())
 
   console.log('Loged in. Is connected:' + web3auth.connected)
-  console.log(await web3auth.getUserInfo())
+  console.log(await web3auth.getUserInfo());
 
+  const Iprovider = web3auth.provider // should I continue from here?
 } catch (e) {
-  console.log(e)
+  console.error(e)
 }
 
 </script>
