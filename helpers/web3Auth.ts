@@ -73,7 +73,7 @@ export default async function getWeb3AuthIProvider() {
     console.log('Logged in. Is connected:' + web3auth.connected)
     // console.log(await web3auth.getUserInfo());
 
-    return web3auth.provider
+    return web3auth
   } catch (e) {
     console.error(e)
   }

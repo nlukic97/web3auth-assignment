@@ -3,15 +3,15 @@
 import type { IProvider } from "@web3auth/base";
 
 // module imports
-import getWeb3AuthIProvider from "../helpers/web3Auth"
+import Web3Auth from "../helpers/web3Auth"
 import walletInterface from "../helpers/Wallet"
 
 
 // import smart contract abi
 import smartContractAbi from "../abi/abi.json"
 
-const Iprovider = await getWeb3AuthIProvider();
-const wallet = await walletInterface(Iprovider as IProvider, smartContractAbi, '0x6168C156825d4BCD7Ccb6d25e844F661B28b8DFa')
+const web3Auth = await Web3Auth();
+const wallet = await walletInterface(web3Auth, smartContractAbi, '0x6168C156825d4BCD7Ccb6d25e844F661B28b8DFa')
 
 // getting connected account
 const userAccount = await wallet.getAccount()
@@ -40,6 +40,7 @@ if(!true){
 <template>
   <div>
     <Nav></Nav>
+    <button @click="wallet.logout()">Logout</button>
     <slot />
   </div>
 </template>
