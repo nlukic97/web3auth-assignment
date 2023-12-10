@@ -1,15 +1,12 @@
 <script lang="ts" setup>
-// type imports
 import { WALLET_ADAPTERS, type IProvider } from "@web3auth/base";
+import type { Web3AuthNoModal } from "@web3auth/no-modal";
 
-// module imports
 import Web3Auth from "../helpers/web3Auth"
 import Web3 from 'web3';
 
-
-// import smart contract abi
 import smartContractAbi from "../abi/abi.json"
-import type { Web3AuthNoModal } from "@web3auth/no-modal";
+
 
 const web3Auth: Web3AuthNoModal = await Web3Auth() as Web3AuthNoModal;
 
