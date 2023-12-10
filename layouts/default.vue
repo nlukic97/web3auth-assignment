@@ -16,6 +16,7 @@ const balance = useState(() => BigInt(0))
 const erc20Balance = useState(() => BigInt(0))
 const myAddress = useState(() => '')
 
+/* Method - Show Wallet address */
 async function showWalletAddress(){
   const web3 = new Web3(web3Auth?.provider as IProvider)
   const userAccounts = await web3.eth.getAccounts()
