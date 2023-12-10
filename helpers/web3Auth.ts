@@ -3,7 +3,7 @@ import {
   OPENLOGIN_NETWORK,
 } from "@web3auth/base";
 
-// prime imports
+// Imports
 import { Web3AuthNoModal } from "@web3auth/no-modal";
 import { EthereumPrivateKeyProvider } from "@web3auth/ethereum-provider";
 import { OpenloginAdapter } from "@web3auth/openlogin-adapter";
@@ -27,7 +27,7 @@ export default async function getWeb3AuthIProvider() {
     chainConfig
   });
 
-  // Privat key provider
+  // Private key provider
   const privateKeyProvider = new EthereumPrivateKeyProvider({ config: { chainConfig } });
 
   // Open Login Adapter

@@ -9,56 +9,58 @@ import Web3 from 'web3';
 
 // import smart contract abi
 import smartContractAbi from "../abi/abi.json"
+import type { Web3AuthNoModal } from "@web3auth/no-modal";
 
-const web3Auth = await Web3Auth();
+const web3Auth: Web3AuthNoModal = await Web3Auth() as Web3AuthNoModal;
 
 /* State */
 const isLoggedIn = useState(() => web3Auth.connected)
-const balance = useState(() => 0)
-const erc20Balance = useState(() => 0)
+const balance = useState(() => BigInt(0))
+const erc20Balance = useState(() => BigInt(0))
 
-// getting balance
+/* Method - Get MATIC balance */
 async function showMaticBalance() {
   const web3 = new Web3(web3Auth?.provider as IProvider)
   const userAccounts = await web3.eth.getAccounts()
-  const tokenBalance = await web3.eth.getBalance(userAccounts[0])
-  balance.value = tokenBalance;
+  balance.value = await web3.eth.getBalance(userAccounts[0])
 }
 
+/* Method - Get ERC20 balance */
 async function showERC20Balance() {
   const web3 = new Web3(web3Auth?.provider as IProvider)
   const userAccounts = await web3.eth.getAccounts()
   const userAccount = userAccounts[0]
+
   const ERC20Contract = new web3.eth.Contract(smartContractAbi, '0x6168C156825d4BCD7Ccb6d25e844F661B28b8DFa')
-  const tokenBalance = await ERC20Contract.methods.balanceOf(userAccount).call({ from: userAccount })
-  console.log(tokenBalance)
-  erc20Balance.value = tokenBalance;
+
+  erc20Balance.value = await ERC20Contract.methods.balanceOf(userAccount).call({ from: userAccount })
 }
 
+/* Method - Mint 1000000000000000000 ERC20 tokens, and update balance */
 async function mintERC20() {
   const web3 = new Web3(web3Auth?.provider as IProvider)
   const userAccounts = await web3.eth.getAccounts()
   const userAccount = userAccounts[0]
+
   const ERC20Contract = new web3.eth.Contract(smartContractAbi, '0x6168C156825d4BCD7Ccb6d25e844F661B28b8DFa')
+
   await ERC20Contract.methods.mint(userAccount, '1000000000000000000').send({ from: userAccount })
     .on('receipt', (data) => console.log(data))
     .on('error', (err) => console.log(err))
 
-  showERC20Balance()
+  showERC20Balance() // ti update the balance the user has
 }
 
+/* Log in the user */
 async function login() {
-  try {
-    await web3Auth.connectTo(WALLET_ADAPTERS.OPENLOGIN, {
-      loginProvider: "apple",
-    });
+  await web3Auth.connectTo(WALLET_ADAPTERS.OPENLOGIN, {
+    loginProvider: "apple",
+  });
 
-    isLoggedIn.value = true
-  } catch (e) {
-    console.error(e)
-  }
+  isLoggedIn.value = true
 }
 
+/* Logout the user */
 async function logout() {
   await web3Auth.logout();
   isLoggedIn.value = false
@@ -68,22 +70,27 @@ async function logout() {
 
 <template>
   <div>
-    <Nav></Nav>
+    <h1>Web3auth No Modal App example</h1>
+    <!-- Show these options only if logged in -->
     <div v-if="isLoggedIn">
-      <button @click="showMaticBalance">Get MATIC Balance</button>
-      <div>MATIC: {{ balance }}</div>
-      <br />
-      <br />
-      <button @click="showERC20Balance">Get MyToken Balance</button>
-      <div>MATIC: {{ erc20Balance }}</div>
-      <br />
-      <button @click="mintERC20">Mint ERC20 tokens</button>
+      <div>
+        <button @click="showMaticBalance">Get MATIC Balance</button>{{ " " }}
+        <span>{{ balance }} MATIC</span>
+      </div>
+      <br>
+      <div>
+        <button @click="showERC20Balance">Get ERC20 Balance</button>{{ " " }}
+        <span>{{ erc20Balance }} MATIC</span>
+      </div>
+      <br>
+      <button @click="mintERC20">Mint ERC20 token</button>
+      <br>
+      <br>
+      <button @click="logout">Logout</button>
     </div>
     <br />
 
     <button v-if="!isLoggedIn" @click="login">Log in</button>
-    <button v-if="isLoggedIn" @click="logout">Logout</button>
-    <slot />
   </div>
 </template>
 
