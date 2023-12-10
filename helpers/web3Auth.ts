@@ -3,13 +3,12 @@ import {
   OPENLOGIN_NETWORK,
 } from "@web3auth/base";
 
-// Imports
 import { Web3AuthNoModal } from "@web3auth/no-modal";
 import { EthereumPrivateKeyProvider } from "@web3auth/ethereum-provider";
 import { OpenloginAdapter } from "@web3auth/openlogin-adapter";
 
-export default async function getWeb3AuthIProvider() {
-  // chain config - Polygon
+export default async function getWeb3Auth() {
+  // chain config - Polygon Mumbai Testnet
   const chainConfig = {
     chainNamespace: CHAIN_NAMESPACES.EIP155,
     chainId: "0x13881",
