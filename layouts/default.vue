@@ -45,7 +45,8 @@ async function mintERC20() {
     .on('receipt', (data) => console.log(data))
     .on('error', (err) => console.log(err))
 
-  showERC20Balance() // ti update the balance the user has
+  showMaticBalance()
+  showERC20Balance()
 }
 
 /* Log in the user */
@@ -68,27 +69,34 @@ async function logout() {
 <template>
   <div>
     <h1>Web3auth No Modal App example</h1>
+
     <!-- Show these options only if logged in -->
     <div v-if="isLoggedIn">
-      <div>
-        <button @click="showMaticBalance">Get MATIC Balance</button>{{ " " }}
+      <div class="box">
+        <button @click="showMaticBalance">Get MATIC Balance</button>
         <span>{{ balance }} MATIC</span>
       </div>
-      <br>
-      <div>
-        <button @click="showERC20Balance">Get ERC20 Balance</button>{{ " " }}
+      <div class="box">
+        <button @click="showERC20Balance">Get ERC20 Balance</button>
         <span>{{ erc20Balance }} MATIC</span>
       </div>
-      <br>
-      <button @click="mintERC20">Mint ERC20 token</button>
-      <br>
-      <br>
-      <button @click="logout">Logout</button>
+      <div class="box">
+        <button @click="mintERC20">Mint ERC20 token</button>
+      </div>
     </div>
     <br />
 
     <button v-if="!isLoggedIn" @click="login">Log in</button>
+    <button v-if="isLoggedIn" @click="logout">Log out</button>
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.box {
+  margin: 10px 0;
+}
+
+.box span {
+  padding-left: 5px;
+}
+</style>
