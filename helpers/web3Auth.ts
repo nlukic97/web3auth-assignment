@@ -1,8 +1,6 @@
 import {
   CHAIN_NAMESPACES,
   OPENLOGIN_NETWORK,
-  WALLET_ADAPTERS,
-  type IProvider,
 } from "@web3auth/base";
 
 // prime imports
@@ -53,26 +51,6 @@ export default async function getWeb3AuthIProvider() {
   // Init Web3Auth
   try {
     await web3auth.init();
-    console.log('init done')
-
-    /* await web3auth.logout()
-    console.log('logged out') */
-    if (!web3auth.connected) {
-      console.log(`Web3Auth instance is connected. Connecting...`)
-
-      await web3auth.connectTo(WALLET_ADAPTERS.OPENLOGIN, {
-        loginProvider: "apple",
-      });
-    } else {
-      console.log('Already connected.')
-      // console.log('web3authprovider: ', web3authProvider)
-    }
-
-    // console.log(await web3auth.authenticateUser())
-
-    console.log('Logged in. Is connected:' + web3auth.connected)
-    // console.log(await web3auth.getUserInfo());
-
     return web3auth
   } catch (e) {
     console.error(e)
