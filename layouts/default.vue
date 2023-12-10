@@ -16,7 +16,7 @@ const balance = useState(() => BigInt(0))
 const erc20Balance = useState(() => BigInt(0))
 const myAddress = useState(() => '')
 
-async function getMyAddress(){
+async function showWalletAddress(){
   const web3 = new Web3(web3Auth?.provider as IProvider)
   const userAccounts = await web3.eth.getAccounts()
   const addr = userAccounts[0]
@@ -64,7 +64,6 @@ async function login() {
   });
 
   isLoggedIn.value = true
-  await getMyAddress()
 }
 
 /* Logout the user */
@@ -82,7 +81,7 @@ async function logout() {
     <!-- Show these options only if logged in -->
     <div v-if="isLoggedIn">
       <div class="box">
-        <button @click="getMyAddress">Show Address</button>
+        <button @click="showWalletAddress">Show Address</button>
         {{ myAddress }}
       </div>
       <div class="box">
@@ -91,7 +90,7 @@ async function logout() {
       </div>
       <div class="box">
         <button @click="showERC20Balance">Get ERC20 Balance</button>
-        <span>{{ erc20Balance }} MATIC</span>
+        <span>{{ erc20Balance }} ERC20</span>
       </div>
       <div class="box">
         <button @click="mintERC20">Mint ERC20 token</button>
