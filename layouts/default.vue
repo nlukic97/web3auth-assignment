@@ -14,6 +14,14 @@ const web3Auth: Web3AuthNoModal = await Web3Auth() as Web3AuthNoModal;
 const isLoggedIn = useState(() => web3Auth.connected)
 const balance = useState(() => BigInt(0))
 const erc20Balance = useState(() => BigInt(0))
+const myAddress = useState(() => '')
+
+async function getMyAddress(){
+  const web3 = new Web3(web3Auth?.provider as IProvider)
+  const userAccounts = await web3.eth.getAccounts()
+  const addr = userAccounts[0]
+  myAddress.value = addr
+}
 
 /* Method - Get MATIC balance */
 async function showMaticBalance() {
@@ -56,6 +64,7 @@ async function login() {
   });
 
   isLoggedIn.value = true
+  await getMyAddress()
 }
 
 /* Logout the user */
@@ -73,6 +82,10 @@ async function logout() {
     <!-- Show these options only if logged in -->
     <div v-if="isLoggedIn">
       <div class="box">
+        <button @click="getMyAddress">Show Address</button>
+        {{ myAddress }}
+      </div>
+      <div class="box">
         <button @click="showMaticBalance">Get MATIC Balance</button>
         <span>{{ balance }} MATIC</span>
       </div>
@@ -84,7 +97,6 @@ async function logout() {
         <button @click="mintERC20">Mint ERC20 token</button>
       </div>
     </div>
-    <br />
 
     <button v-if="!isLoggedIn" @click="login">Log in</button>
     <button v-if="isLoggedIn" @click="logout">Log out</button>
